@@ -15,7 +15,6 @@ class Tags extends React.Component {
       text: props.initialText
     };
   };
-
   showLastTag = () => {
     this.setState(state =>
       ({
@@ -76,38 +75,40 @@ class Tags extends React.Component {
     return (
       <View style={[styles.container, containerStyle, style]}>
 
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', alignSelf: 'flex-start'}}>
         {this.state.tags.map((tag, index) => {
 
-          const tagProps = {
-            tag,
-            index,
-            deleteTagOnPress,
-            onPress: event => {
-              event?.persist();
-              if (deleteTagOnPress && !readonly) {
-                this.setState(state =>
-                  ({
-                    tags: [
-                      ...state.tags.slice(0, index),
-                      ...state.tags.slice(index + 1)
-                    ]
-                  }),
-                  () => {
-                    this.props.onChangeTags &&
-                      this.props.onChangeTags(this.state.tags);
-                    onTagPress && onTagPress(index, tag, event, true);
-                  }
-                );
-              } else {
-                onTagPress && onTagPress(index, tag, event, false);
-              }
-            },
-            tagContainerStyle,
-            tagTextStyle
-          };
+        const tagProps = {
+          tag,
+          index,
+          deleteTagOnPress,
+          onPress: event => {
+            event?.persist();
+            if (deleteTagOnPress && !readonly) {
+              this.setState(state =>
+                ({
+                  tags: [
+                    ...state.tags.slice(0, index),
+                    ...state.tags.slice(index + 1)
+                  ]
+                }),
+                () => {
+                  this.props.onChangeTags &&
+                    this.props.onChangeTags(this.state.tags);
+                  onTagPress && onTagPress(index, tag, event, true);
+                }
+              );
+            } else {
+              onTagPress && onTagPress(index, tag, event, false);
+            }
+          },
+          tagContainerStyle,
+          tagTextStyle
+        };
 
-          return renderTag(tagProps);
+        return renderTag(tagProps);
         })}
+      </View>
 
         {!readonly
           && maxNumberOfTags > this.state.tags.length
@@ -128,7 +129,7 @@ class Tags extends React.Component {
 
 Tags.defaultProps = {
   initialTags: [],
-  initialText: " ",
+  initialText: "",
   createTagOnString: [",", " "],
   createTagOnReturn: false,
   readonly: false,
